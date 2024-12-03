@@ -17,6 +17,8 @@ namespace cheniyytool
         private SplitContainer splitContainer;
         private ListBox menuListBox;
         private Panel contentPanel;
+        private Button explainButton;
+        private Label explanationLabel;
 
         public Form1()
         {
@@ -39,7 +41,7 @@ namespace cheniyytool
             // 初始化菜单 ListBox
             menuListBox = new ListBox();
             menuListBox.Dock = DockStyle.Fill;
-            menuListBox.Items.AddRange(new string[] { "简介", "优化" });
+            menuListBox.Items.AddRange(new string[] { "简介", "设置优化", "aichat" });
             menuListBox.SelectedIndexChanged += MenuListBox_SelectedIndexChanged;
             menuListBox.Font = new Font("微软雅黑", 12, FontStyle.Regular);
             menuListBox.BackColor = Color.LightGray;
@@ -95,14 +97,14 @@ namespace cheniyytool
 
                     // 创建第二个按钮
                     Button button2 = new Button();
-                    button2.Text = "github(未开发)";
+                    button2.Text = "github项目";
                     button2.Size = new Size(100, 30);
                     button2.Location = new Point(130, 60);
                     button2.Click += (s, args) =>
                     {
                         try
                         {
-                            Process.Start(new ProcessStartInfo("https://github.com/") { UseShellExecute = true });
+                            Process.Start(new ProcessStartInfo("https://github.com/y2732114608/cheniyytool") { UseShellExecute = true });
                         }
                         catch (Exception ex)
                         {
@@ -114,7 +116,7 @@ namespace cheniyytool
                     contentPanel.Controls.Add(button1);
                     contentPanel.Controls.Add(button2);
                 }
-                else if (menuListBox.SelectedItem.ToString() == "优化")
+                else if (menuListBox.SelectedItem.ToString() == "设置优化")
                 {
                     // 添加按钮和输入框
                     Button optionButton = new Button();
@@ -129,13 +131,55 @@ namespace cheniyytool
                     inputBox.Location = new Point(230, 20);
                     inputBox.Name = "inputBox"; // 设置输入框的名称，方便在事件处理程序中访问
                     contentPanel.Controls.Add(inputBox);
-                    // 添加文本标签
-                    Label inputLabel = new Label();
-                    inputLabel.Text = "用于在后台任务和程序之间分配优先级的参数。默认值2";
-                    inputLabel.Font = new Font("微软雅黑", 12, FontStyle.Regular);
-                    inputLabel.AutoSize = true;
-                    inputLabel.Location = new Point(340, 25);
-                    contentPanel.Controls.Add(inputLabel);
+
+                    // 添加控制显示/隐藏解释的按钮
+                    explainButton = new Button();
+                    explainButton.Text = "显示解释";
+                    explainButton.Size = new Size(100, 30);
+                    explainButton.Location = new Point(340, 20);
+                    explainButton.Click += ExplainButton_Click;
+                    contentPanel.Controls.Add(explainButton);
+
+                    // 添加用于显示解释的标签，初始状态为不可见
+                    explanationLabel = new Label();
+                    explanationLabel.Text = "用于在后台任务和程序之间分配优先级的参数。默认值2";
+                    explanationLabel.Font = new Font("微软雅黑", 12, FontStyle.Regular);
+                    explanationLabel.AutoSize = true;
+                    explanationLabel.Location = new Point(20, 60);
+                    explanationLabel.Visible = false;
+                    contentPanel.Controls.Add(explanationLabel);
+                }
+                else if (menuListBox.SelectedItem.ToString() == "aichat")
+                {
+                    // 创建第一个按钮
+                    Button button1 = new Button();
+                    button1.Text = "跳转窗口1";
+                    button1.Size = new Size(100, 30);
+                    button1.Location = new Point(20, 20);
+                    button1.Click += (s, args) =>
+                    {
+                        this.Hide();
+                        Form2 form2 = new Form2();
+                        form2.ShowDialog();
+                        this.Show();
+                    };
+
+                    // 创建第二个按钮
+                    Button button2 = new Button();
+                    button2.Text = "跳转窗口2";
+                    button2.Size = new Size(100, 30);
+                    button2.Location = new Point(130, 20);
+                    button2.Click += (s, args) =>
+                    {
+                        this.Hide();
+                        Form3 form3 = new Form3();
+                        form3.ShowDialog();
+                        this.Show();
+                    };
+
+                    // 添加按钮到 contentPanel
+                    contentPanel.Controls.Add(button1);
+                    contentPanel.Controls.Add(button2);
                 }
             }
             catch (Exception ex)
@@ -177,6 +221,20 @@ namespace cheniyytool
                 {
                     MessageBox.Show("请输入有效的数字");
                 }
+            }
+        }
+
+        private void ExplainButton_Click(object sender, EventArgs e)
+        {
+            if (explanationLabel.Visible)
+            {
+                explanationLabel.Visible = false;
+                explainButton.Text = "显示解释";
+            }
+            else
+            {
+                explanationLabel.Visible = true;
+                explainButton.Text = "收起";
             }
         }
 
